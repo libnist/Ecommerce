@@ -15,8 +15,8 @@ export default function ProductScreen() {
     useEffect(() => {
         const getProduct = async() => {
             try{
-                const {data} = await axios.get(`/api/products/${params.id}`)
-                setProduct(data) 
+                const response = await axios.get(`/api/products/${params.id}`)
+                setProduct(response.data) 
             } catch (e) {
                 console.log(e)
             }
@@ -39,7 +39,7 @@ export default function ProductScreen() {
 
         <Row>
             <Col md={6}>
-             <Image src={product.image} alt={product.name} fluid/>
+             <Image src={"http://localhost:8000" + product.image} alt={product.name} fluid/>
             </Col>
 
             <Col md={3}>

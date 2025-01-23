@@ -6,7 +6,7 @@ export default function Product({ _id, image, name, rating, numReviews, price })
     return (
         <Card className="my-3 p-3 rounded h-100">
             <Link to={`/products/${_id}`}>
-                <Card.Img src={image} />
+                <Card.Img src={"http://localhost:8000"+image} />
             </Link>
 
             <Card.Body>
