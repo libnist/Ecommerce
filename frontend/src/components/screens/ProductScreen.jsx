@@ -3,39 +3,33 @@ import { Link, useParams } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Button, Card } from "react-bootstrap";
 
 import Rating from "../Rating";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { listProductDetails } from "../../store/product";
+
+import Loader from "../Loader"
+import Message from "../Message";
 
 export default function ProductScreen() {
 
     const params = useParams();
+    const dispatch = useDispatch();
+    const {product, loading, error} = useSelector(state => state.product)
 
-    const [product, setProduct] = useState();
 
     useEffect(() => {
-        const getProduct = async() => {
-            try{
-                const response = await axios.get(`/api/products/${params.id}`)
-                setProduct(response.data) 
-            } catch (e) {
-                console.log(e)
-            }
-        }
 
-        getProduct();
-    }, [params.id])
-
-    if (product === undefined) {
-        return (
-            <>
-            Loading...
-            </>
-        )
-    }
+        dispatch(listProductDetails(params.id))
+        
+    }, [params.id, dispatch])
 
     return (
         <>
         <Link to="/" className="btn btn-light my-3">Go Back</Link>
+
+        { loading && <Loader/>}
+        { error && <Message variant="danger">{error}</Message>}
 
         <Row>
             <Col md={6}>

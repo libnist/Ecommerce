@@ -1,31 +1,28 @@
 import { Row, Col } from "react-bootstrap";
 import Product from "../Product";
+import Loader from "../Loader";
+import Message from "../Message";
 
-import { useState, useEffect } from "react";
-
-import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { listProducts } from "../../store/products";
 
 export default function HomeScreen() {
 
-    const [products, setProducts] = useState([]);
+    const dispath = useDispatch();
+    const {products, loading, error} = useSelector(state => state.products)
 
     useEffect(()=> {
-        const getProducts = async() => {
-            try {
-                const products = await axios.get("/api/products/");
-                setProducts(products.data)
-
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        getProducts();
-    }, [])
+        dispath(listProducts());
+    }, [dispath])
 
     return (
         <>
             <h1>Latest Products</h1>
+
+            { loading && <Loader/>}
+            { error && <Message variant="danger">{error}</Message>}
+
             <Row className="gy-3">
                 {
                     products.map(product => (
