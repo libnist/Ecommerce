@@ -68,6 +68,7 @@ def registerUser(request):
         )
         
         user.set_password(data["password"])
+        user.save();
 
         serializer = UserSerializerWithToken(user, many=False)
 
