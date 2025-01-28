@@ -50,4 +50,24 @@ export const login = (email, password) => async (dispatch) => {
     }
 }
 
+export const register = (inputData) => async(dispatch) => {
+    try {
+        dispatch(userActions.loginRequest)
+
+        const config = {
+            headers: {
+                "content-type": "application/json"
+            }
+        } 
+
+        const { data } = await axios.post("/api/users/register", inputData, config)
+
+        dispatch(userActions.loginSuccess(data))
+        localStorage.setItem("userInfo", JSON.stringify(data))
+
+    } catch (error) {
+        dispatch(userActions.loginFail(error.response && error.response.data.detail ? error.response.data.detail : error.message))
+    }
+}
+
 export default userSlice.reducer;
