@@ -70,4 +70,26 @@ export const register = (inputData) => async(dispatch) => {
     }
 }
 
+export const update = (inputData) => async (dispatch, getState) => {
+
+    try {
+        dispatch(userActions.loginRequest());
+
+        const config = {
+            headers: {
+                "content-type": "application/json",
+                "Authorization": `Bearer ${getState().user.userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.put("/api/users/profile/update", inputData, config);
+
+        dispatch(userActions.loginSuccess(data));
+
+        localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (error) {
+        dispatch(userActions.loginFail(error.respone && error.respone.data.detail ? error.response.data.detail : error.message))
+    }
+}
+
 export default userSlice.reducer;
