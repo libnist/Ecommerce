@@ -2,10 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : []
+const shippingAddress = localStorage.getItem("shippingAddress") ? localStorage.getItem("shippingAddress") : {};
 
 const cartSlice = createSlice({
     name: "cart",
-    initialState: { cartItems: cartItemsFromStorage },
+    initialState: { cartItems: cartItemsFromStorage, shippingAddress},
     reducers: {
         cartAddItem: (state, action) => {
             const item = action.payload;
@@ -21,6 +22,9 @@ const cartSlice = createSlice({
         },
         cartRemoveItem: (state, action) => {
             state.cartItems = state.cartItems.filter(x => x.product != action.payload);
+        },
+        cartSaveShippingAddress: (state, action) => {
+            state.shippingAddress = action.payload;
         }
     }
 })
@@ -47,6 +51,11 @@ export const addToCartAction = (id, qty) => async (dispatch, getState) => {
 export const removeFromCart = (id) => async (dispatch, getState) => {
     dispatch(cartActions.cartRemoveItem(id))
     localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems))
+}
+
+export const saveShippingAddress = (data) => (dispatch) => {
+    dispatch(cartActions.cartSaveShippingAddress(data));
+    localStorage.setItem("shippingAddress", JSON.stringify(data));
 }
 
 export default cartSlice.reducer;
