@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : []
-const shippingAddress = localStorage.getItem("shippingAddress") ? localStorage.getItem("shippingAddress") : {};
+const shippingAddress = localStorage.getItem("shippingAddress") ? JSON.parse(localStorage.getItem("shippingAddress")) : {};
+const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : "";
 
 const cartSlice = createSlice({
     name: "cart",
-    initialState: { cartItems: cartItemsFromStorage, shippingAddress},
+    initialState: { cartItems: cartItemsFromStorage, shippingAddress, paymentMethod},
     reducers: {
         cartAddItem: (state, action) => {
             const item = action.payload;
@@ -25,6 +26,9 @@ const cartSlice = createSlice({
         },
         cartSaveShippingAddress: (state, action) => {
             state.shippingAddress = action.payload;
+        },
+        cartSavePaymentMethod: (state, action) => {
+            state.paymentMethod = action.payload;
         }
     }
 })
@@ -57,5 +61,11 @@ export const saveShippingAddress = (data) => (dispatch) => {
     dispatch(cartActions.cartSaveShippingAddress(data));
     localStorage.setItem("shippingAddress", JSON.stringify(data));
 }
+
+export const savePaymentMethod = (data) => (dispatch) => {
+    dispatch(cartActions.cartSavePaymentMethod(data));
+    localStorage.setItem("paymentMethod", JSON.stringify(data));
+}
+
 
 export default cartSlice.reducer;

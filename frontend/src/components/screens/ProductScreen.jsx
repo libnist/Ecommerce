@@ -40,7 +40,7 @@ export default function ProductScreen() {
 
         <Row>
             <Col md={6}>
-             <Image src={"http://localhost:8000" + product.image} alt={product.name} fluid/>
+             <Image src={product.image} alt={product.name} fluid/>
             </Col>
 
             <Col md={3}>
