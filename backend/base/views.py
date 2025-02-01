@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework.response import Response, Order, OrderItem, ShippingAddress
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
@@ -43,22 +43,23 @@ def getUserProfile(request):
 
     return Response(serializer.data)
 
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
     user = request.user
 
     serializer = UserSerializerWithToken(user, many=False)
-    
+
     data = request.data
-    
+
     user.first_name = data["name"]
     user.username = data["email"]
     user.email = data["email"]
-    
+
     if data["password"] != "":
         user.set_password(data["password"])
-        
+
     user.save()
 
     return Response(serializer.data)
@@ -86,9 +87,9 @@ def registerUser(request):
             email=data["email"],
 
         )
-        
+
         user.set_password(data["password"])
-        user.save();
+        user.save()
 
         serializer = UserSerializerWithToken(user, many=False)
 
@@ -96,3 +97,32 @@ def registerUser(request):
     except:
         message = {"message": "User already exists."}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def addOrderItems(request):
+    user = request.user
+    data = request.data
+    orderItems = data["orderItems"]
+
+    if orderItems and len(orderItems) == 0:
+        return Response({"detail": "No Order Items."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        # (1) Create order
+        
+        order = Order.objects.create(
+            user=user,
+            paymentMethod=data["paymentMethod"],
+            taxPrice=data["taxPrice"],
+            shippingPrice=data["shippingPrice"],
+            totalPrice=data["totalPrice"]
+        )
+
+        # (2) Create shipping address
+
+        # (3) Create order items adn set order to orderItem relation ship
+        
+        # (4) Update product stock
+
+    return Response("ORDER")
