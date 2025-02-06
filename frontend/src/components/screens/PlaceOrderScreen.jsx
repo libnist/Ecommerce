@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useNavigate, Link } from "react-router-dom"
 
@@ -6,19 +6,49 @@ import { Button, Row, Col, ListGroup, Image, Card} from "react-bootstrap"
 
 import { useDispatch, useSelector } from "react-redux"
 
+import { createOrder } from "../../store/order"
+
 import CheckoutSteps from "../CheckoutSteps";
 import Message from "../Message";
 
+import { cartActions } from "../../store/cart"
+import { orderActions } from "../../store/order"
+
 export default function PlaceOrderScreen() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const cart = useSelector(state => state.cart);
+    const orderCreate = useSelector(state => state.order);
+
+    const { order, error, success} = orderCreate;
 
     const itemsPrice = cart.cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2);
     const shippingPrice = (itemsPrice >= 100 ? +0 : +10).toFixed(2);
-    const taxParice = ((0.082) * itemsPrice).toFixed(2);
-    const totalPrice = (+itemsPrice + +shippingPrice + +taxParice).toFixed(2);
+    const taxPrice = ((0.082) * itemsPrice).toFixed(2);
+    const totalPrice = (+itemsPrice + +shippingPrice + +taxPrice).toFixed(2);
+
+    if (!cart.paymentMethod) {
+        navigate("/payment")
+    }
+
+    useEffect(() => {
+        if (success) {
+            navigate(`/order/${order._id}`)
+            dispatch(cartActions.cartClearItems());
+            dispatch(orderActions.orderReset());
+        }
+    }, [success, navigate, order, dispatch])
 
     const placeOrder = () => {
-
+        dispatch(createOrder({
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice,
+            shippingPrice,
+            taxPrice,
+            totalPrice
+        }))
     }
 
     return (
@@ -95,7 +125,7 @@ export default function PlaceOrderScreen() {
                         <ListGroup.Item>
                             <Row>
                                 <Col >Tax:</Col>
-                                <Col>${taxParice}</Col>
+                                <Col>${taxPrice}</Col>
                             </Row>
                         </ListGroup.Item>
 
@@ -104,6 +134,10 @@ export default function PlaceOrderScreen() {
                                 <Col >Total:</Col>
                                 <Col>${totalPrice}</Col>
                             </Row>
+                        </ListGroup.Item>
+
+                        <ListGroup.Item>
+                            {error && <Message variant={"danger"}>{error}</Message>}
                         </ListGroup.Item>
 
                         <ListGroup.Item>

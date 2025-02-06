@@ -121,7 +121,7 @@ def addOrderItems(request):
 
         # (2) Create shipping address
 
-        ShippingAddress = ShippingAddress.objects.create(
+        shippingAddress = ShippingAddress.objects.create(
             order=order,
             address=data["shippingAddress"]["address"],
             city=data["shippingAddress"]["city"],

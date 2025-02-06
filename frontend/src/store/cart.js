@@ -29,6 +29,10 @@ const cartSlice = createSlice({
         },
         cartSavePaymentMethod: (state, action) => {
             state.paymentMethod = action.payload;
+        },
+        cartClearItems: (state) => {
+            state.cartItems = [];
+            localStorage.removeItem("cartItems");
         }
     }
 })
