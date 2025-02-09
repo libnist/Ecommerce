@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const orderDetailsSlice = createSlice({
-    name: "order",
-    initialState: { loading: false, orderItems: [], shippingAddress: {}, error: null},
+    name: "orderDetails",
+    initialState: { loading: false, order: {}, error: null},
     reducers: {
         orderDetailsRequest: (state) => {
             state.loading = true;
         },
         orderDetailsSuccess: (state, action) => {
             state.loading = false;
-            state.orderItems = action.payload;
+            state.order = action.payload;
         },
         orderDetailsFailed: (state, action) => {
             state.loading = false;
