@@ -10,6 +10,8 @@ from .models import Product, User, Order, OrderItem, ShippingAddress
 from .serializers import (ProductSerializer, MyTokenObtainPairSerializer, UserSerializer,
                           UserSerializerWithToken, OrderSerializer)
 
+from datetime import datetime
+
 from .products import products
 
 # Create your views here.
@@ -166,3 +168,15 @@ def getOrderById(request, pk):
             return Response({"detail": "Not authorized to view this order"}, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response({"detail": "Order does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def updateOrderToPaid(request, pk):
+    order = Order.objects.get(_id=pk)
+    
+    order.isPaid = True
+    order.paidAt = datetime.now()
+    
+    order.save()
+    return Response("Order was paid")
