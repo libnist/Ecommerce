@@ -58,13 +58,13 @@ export default function OrderScreen() {
                     <ListGroup variant="flush">
                         <ListGroup.Item>
                             <h2>Shipping</h2>
-                            <p>
+                            <div>
                                 <strong>Shipping: </strong>
                                 <p><strong>Name: </strong>{order.user.name}</p>
                                 <p><strong>Email: </strong><a href={`mailto:${order.user.email}`}>{order.user.email}</a></p>
 
                                 {order.shippingAddress.address}, {order.shippingAddress.city} {order.shippingAddress.postalCode}, {order.shippingAddress.country}
-                            </p>
+                            </div>
 
                             {order.isDelivered ? (<Message variant="success">Delivered on {order.deliveredAt}</Message>) : (<Message variant="warning">Not Delivered</Message>)}
                         </ListGroup.Item>

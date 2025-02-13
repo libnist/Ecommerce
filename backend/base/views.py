@@ -180,3 +180,12 @@ def updateOrderToPaid(request, pk):
     
     order.save()
     return Response("Order was paid")
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getMyOrders(request):
+    user = request.user
+    orders = user.order_set.all()
+    
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)

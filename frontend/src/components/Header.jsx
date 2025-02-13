@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 
 import { userActions } from "../store/user";
+import { myOrdersActions } from "../store/myOrders";
 
 
 export default function Header() {
@@ -13,7 +14,8 @@ export default function Header() {
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
-        dispatch(userActions.logout())
+        dispatch(userActions.logout());
+        dispatch(myOrdersActions.myOrdersReset());
     }
 
     return (

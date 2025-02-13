@@ -7,6 +7,7 @@ import userReducer from "./user";
 import orderReducer from "./order";
 import orderDetailsReducer from "./orderDetails";
 import orderPayReducer from "./payOrder";
+import myOrdersReducer from "./myOrders";
 
 const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
         order: orderReducer,
         orderDetails: orderDetailsReducer,
         pay: orderPayReducer,
+        myOrders: myOrdersReducer,
     }
 })
 
