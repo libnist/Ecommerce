@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { userActions } from "../store/user";
 import { myOrdersActions } from "../store/myOrders";
+import { usersActions } from "../store/users";
 
 
 export default function Header() {
@@ -16,6 +17,7 @@ export default function Header() {
     const logoutHandler = () => {
         dispatch(userActions.logout());
         dispatch(myOrdersActions.myOrdersReset());
+        dispatch(usersActions.usersReset());
     }
 
     return (
@@ -37,10 +39,22 @@ export default function Header() {
                                     <NavDropdown.Item as={Link} to="/profile"><i className="fas fa-user"></i>Profile</NavDropdown.Item>
                                     <NavDropdown.Item onClick={logoutHandler}><i className="fas fa-user"></i>Logout</NavDropdown.Item>
 
+
                                 </NavDropdown>
                             ) :
                                 <Nav.Link as={Link} to="/login"><i className="fas fa-user"></i>Login</Nav.Link>
                             }
+
+                            {userInfo && userInfo.isAdmin && (
+                                <NavDropdown title="Admin" id="adminmenu">
+                                    <NavDropdown.Item as={Link} to="/admin/userlist">Users</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/admin/productlist">Products</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/admin/orderlist">Orders</NavDropdown.Item>
+
+
+
+
+                                </NavDropdown>)}
 
                         </Nav>
                     </Navbar.Collapse>

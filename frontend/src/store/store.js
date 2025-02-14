@@ -8,6 +8,7 @@ import orderReducer from "./order";
 import orderDetailsReducer from "./orderDetails";
 import orderPayReducer from "./payOrder";
 import myOrdersReducer from "./myOrders";
+import usersReducer from "./users";
 
 const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
         orderDetails: orderDetailsReducer,
         pay: orderPayReducer,
         myOrders: myOrdersReducer,
+        users: usersReducer,
     }
 })
 
