@@ -9,6 +9,7 @@ import orderDetailsReducer from "./orderDetails";
 import orderPayReducer from "./payOrder";
 import myOrdersReducer from "./myOrders";
 import usersReducer from "./users";
+import userDeleteReducer from "./userDelete";
 
 const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
         pay: orderPayReducer,
         myOrders: myOrdersReducer,
         users: usersReducer,
+        userDelete: userDeleteReducer,
     }
 })
 
