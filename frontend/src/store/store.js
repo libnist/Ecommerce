@@ -10,7 +10,8 @@ import orderPayReducer from "./payOrder";
 import myOrdersReducer from "./myOrders";
 import usersReducer from "./users";
 import userDeleteReducer from "./userDelete";
-import userUpdateReducer from "./userUpdate"
+import userUpdateReducer from "./userUpdate";
+import deleteProductReducer from "./deleteProduct";
 
 const store = configureStore({
     reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
         users: usersReducer,
         userDelete: userDeleteReducer,
         userUpdate: userUpdateReducer,
+        deleteProduct: deleteProductReducer,
     }
 })
 
