@@ -7,6 +7,7 @@ import { Table, Button, Row, Col } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { listProducts } from "../../store/products"
 import { deleteProduct } from "../../store/deleteProduct"
+import { createProduct, createProductActions } from "../../store/createProduct"
 
 import Loader from "../Loader"
 import Message from "../Message"
@@ -20,23 +21,31 @@ export default function ProductListScreen() {
 
     const { products, loading: productsLoading, error: productsError } = useSelector(state => state.products);
 
-    const { loading: deleteLoading, error: deleteError, success: deleteSuccess} = useSelector(state => state.deleteProduct)
+    const { loading: deleteLoading, error: deleteError, success: deleteSuccess } = useSelector(state => state.deleteProduct);
+
+    const { loading: createLoading, error: createError, success: createSuccess, product: createdProduct } = useSelector(state => state.createProduct);
 
     useEffect(() => {
+        dispatch(createProductActions.createProductReset());
         if (!isCurrentUserAdmin) {
             navigate("/");
         }
-        dispatch(listProducts())
-    }, [dispatch, isCurrentUserAdmin, navigate, deleteSuccess]);
+        if (createSuccess) {
+            navigate(`/admin/product/${createdProduct._id}/edit`)
+        } else {
+            dispatch(listProducts())
+
+        }
+    }, [dispatch, isCurrentUserAdmin, navigate, deleteSuccess, createSuccess, createdProduct]);
 
     const deleteHandler = (id) => {
-        if (window.confirm("Are you sure you want to delete this product?")){
+        if (window.confirm("Are you sure you want to delete this product?")) {
             dispatch(deleteProduct(id))
         }
     }
 
-    const createProductHandler = (product) => {
-        console.log("Create Product")
+    const createProductHandler = () => {
+        dispatch(createProduct());
     }
     return (
         <>
@@ -51,8 +60,12 @@ export default function ProductListScreen() {
                     </Button>
                 </Col>
             </Row>
-            {deleteLoading && <Loader/>}
+            {deleteLoading && <Loader />}
             {deleteError && <Message variant="danger">{deleteError}</Message>}
+
+            {createLoading && <Loader />}
+            {createError && <Message variant="danger">{createError}</Message>}
+
             {loading && <Loader />}
             {error && <Message variant={"danger"}>{error}</Message>}
             {!loading && !error && (
@@ -87,6 +100,6 @@ export default function ProductListScreen() {
                     </tbody>
                 </Table>
             )}
-            </>
+        </>
     )
 }
