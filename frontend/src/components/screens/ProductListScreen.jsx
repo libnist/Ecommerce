@@ -90,7 +90,7 @@ export default function ProductListScreen() {
                                 <td>{product.category}</td>
                                 <td>{product.brand}</td>
                                 <td>
-                                    <Link to={`/admin/product/${product._id}`}>
+                                    <Link to={`/admin/product/${product._id}/edit`}>
                                         <Button variant="light" className="btn-sm"><i className="fas fa-edit"></i> </Button>
                                     </Link>
                                     <Button variant="danger" className="btn-sm" onClick={() => deleteHandler(product._id)}><i className="fas fa-trash"></i> </Button>
