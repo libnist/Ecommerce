@@ -13,6 +13,7 @@ import userDeleteReducer from "./userDelete";
 import userUpdateReducer from "./userUpdate";
 import deleteProductReducer from "./deleteProduct";
 import createProductReducer from "./createProduct";
+import updateProductReducre from "./productEdit";
 
 const store = configureStore({
     reducer: {
@@ -29,6 +30,7 @@ const store = configureStore({
         userUpdate: userUpdateReducer,
         deleteProduct: deleteProductReducer,
         createProduct: createProductReducer,
+        updateProduct: updateProductReducre,
     }
 })
 
