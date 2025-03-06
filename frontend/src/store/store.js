@@ -14,6 +14,7 @@ import userUpdateReducer from "./userUpdate";
 import deleteProductReducer from "./deleteProduct";
 import createProductReducer from "./createProduct";
 import updateProductReducre from "./productEdit";
+import ordersReducer from "./orders";
 
 const store = configureStore({
     reducer: {
@@ -31,6 +32,7 @@ const store = configureStore({
         deleteProduct: deleteProductReducer,
         createProduct: createProductReducer,
         updateProduct: updateProductReducre,
+        orders: ordersReducer,
     }
 })
 
