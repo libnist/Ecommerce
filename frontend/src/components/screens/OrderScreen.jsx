@@ -10,6 +10,7 @@ import Message from "../Message";
 import Loader from "../Loader";
 
 import { getOrderDetails } from "../../store/orderDetails"
+import { deliverOrderActions, deliverOrder} from "../../store/deliverOrder";
 
 export default function OrderScreen() {
     const dispatch = useDispatch();
@@ -22,6 +23,11 @@ export default function OrderScreen() {
 
     const { order, error, loading } = orderDetails;
 
+    const {loading: deliverLoading, success: deliverSuccess, error: delvierError} = useSelector(state => state.deliverOrder);
+
+    const {userInfo} = useSelector(state => state.user);
+    const isUserAdmin = userInfo.isAdmin;
+
     let itemsPrice;
     if (!loading && !error && order.orderItems) {
         itemsPrice = order.orderItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2);
@@ -33,10 +39,20 @@ export default function OrderScreen() {
     }
 
     useEffect(() => {
-        if (!order.orderItems || order._id !== Number(orderId)) {
-            dispatch(getOrderDetails(orderId))
+
+        if (!userInfo) {
+            navigate("/login")
         }
-    }, [orderId, dispatch, order])
+
+        if (!order.orderItems || order._id !== Number(orderId) || deliverSuccess) {
+            dispatch(getOrderDetails(orderId))
+            dispatch(deliverOrderActions.delvierOrderReset())
+        }
+    }, [orderId, dispatch, order, deliverSuccess, navigate, userInfo]);
+
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id))
+    }
 
     if (!order.orderItems || loading) {
         return (
@@ -143,6 +159,13 @@ export default function OrderScreen() {
                             <ListGroup.Item>
                                 {error && <Message variant={"danger"}>{error}</Message>}
                             </ListGroup.Item>
+                            {deliverLoading && <Loader/>}
+                            {delvierError && <Message variant={"danger"}>{delvierError}</Message>}
+                            {isUserAdmin && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button type="button" className="btn btn-block w-100" onClick={deliverHandler}>Mark as delivered</Button>
+                                </ListGroup.Item>
+                            )}
                         </ListGroup>
                     </Card>
                 </Col>

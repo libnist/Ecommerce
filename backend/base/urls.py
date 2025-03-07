@@ -24,6 +24,7 @@ urlpatterns = [
     path("orders/add", views.addOrderItems, name="orders-add"),
     path("orders/orders", views.getOrders, name="orders"),
     path("orders/myorders", views.getMyOrders, name="myorders"),
+    path("orders/<str:pk>/delivered", views.updateOrderToDelivered, name="order-delivered"),
     path("orders/<str:pk>", views.getOrderById, name="user-order"),
     path("orders/<str:pk>/pay", views.updateOrderToPaid, name="pay"),
     
