@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from .models import Product, User, Order, OrderItem, ShippingAddress
+from .models import Product, User, Order, OrderItem, ShippingAddress, Review
 from .serializers import (ProductSerializer, MyTokenObtainPairSerializer, UserSerializer,
                           UserSerializerWithToken, OrderSerializer)
 
@@ -293,3 +293,40 @@ def uploadProductImage(request):
     product.image = request.FILES.get("image")
     product.save()
     return Response("Image was saved successfuly", status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def createProductReview(request, pk):
+    user = request.user
+    product = Product.objects.get(_id=pk)
+    data = request.data
+    
+    #1 - Review already exists
+    alreadyExists = product.review_set.filter(user=user).exists()
+    if alreadyExists:
+        content = {"details": "Product already reviewed."}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    #2 - No Rating or 0
+    elif data["rating"] == 0:
+        content = {"details": "Please select a rating "}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        
+    #3 - Create Review
+    else:
+        review = Review.objects.create(
+            user=user,
+            product=product,
+            name=user.first_name,
+            rating=data["rating"],
+            comment=data["comment"]
+        )
+        reviews = product.reviews_set.all()
+        product.numReviews = len(reviews)
+        
+        total = 0
+        for review in reviews:
+            total += review.rating
+        product.rating = total / len(reviews)
+        product.save()
+        content = {"details": "Review has been created."}
+        return Response(content, status=status.HTTP_200_OK)
