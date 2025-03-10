@@ -16,6 +16,7 @@ import createProductReducer from "./createProduct";
 import updateProductReducre from "./productEdit";
 import ordersReducer from "./orders";
 import orderDeliverReducer from "./deliverOrder";
+import createReviewReducer from "./createReview";
 
 const store = configureStore({
     reducer: {
@@ -35,6 +36,7 @@ const store = configureStore({
         updateProduct: updateProductReducre,
         orders: ordersReducer,
         deliverOrder: orderDeliverReducer,
+        createReview: createReviewReducer,
     }
 })
 

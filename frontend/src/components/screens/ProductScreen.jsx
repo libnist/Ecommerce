@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { listProductDetails } from "../../store/product";
+import { createReview, createReviewActions } from "../../store/createReview";
 
 import Loader from "../Loader"
 import Message from "../Message";
@@ -14,11 +15,16 @@ import Message from "../Message";
 export default function ProductScreen() {
 
     const [qty, setQty] = useState(1);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState("");
 
     const params = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {product, loading, error} = useSelector(state => state.product)
+
+    const {loading: createReviewLoading, error: createReviewError, success: createReviewSuccess} = useSelector(state => state.createReview)
+    const {userInfo} = useSelector(state => state.user)
 
 
     useEffect(() => {
@@ -113,6 +119,24 @@ export default function ProductScreen() {
 
                     </ListGroup>
                 </Card>
+            </Col>
+        </Row>
+
+        <Row>
+            <Col md={6}>
+                <h4>Reviews</h4>
+                {product.reviews.length === 0 && <Message variant="info">No Reviews</Message>}
+
+                <ListGroup variant="flush">
+                    {product.reviews.map(review => (
+                        <ListGroup.Item key={review._id}>
+                            <strong>{review.name}</strong>
+                            <Rating value={review.rating} color="#f8e825"/>
+                            <p>{review.createdAt.substring(0, 10)}</p>
+                            <p>{review.comment}</p>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
             </Col>
         </Row>
         </>
