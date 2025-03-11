@@ -33,7 +33,7 @@ export const createReview = (productId, review) => async (dispatch, getState) =>
         dispatch(createReviewActions.createReviewRequest())
 
         const config = {
-            header: {
+            headers: {
                 "content-type": "application/json",
                 Authorization: `Bearer ${getState().user.userInfo.token}`
             }
