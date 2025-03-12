@@ -6,15 +6,17 @@ import Message from "../Message";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../../store/products";
+import { useSearchParams } from "react-router-dom";
 
 export default function HomeScreen() {
 
     const dispath = useDispatch();
-    const {products, loading, error} = useSelector(state => state.products)
+    const {products, loading, error} = useSelector(state => state.products);
+    const [searchParams, _] = useSearchParams();
 
     useEffect(()=> {
-        dispath(listProducts());
-    }, [dispath])
+        dispath(listProducts(searchParams.get("keyword")));
+    }, [dispath, searchParams])
 
     return (
         <>

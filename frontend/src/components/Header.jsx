@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { userActions } from "../store/user";
 import { myOrdersActions } from "../store/myOrders";
 import { usersActions } from "../store/users";
+import SerachBox from "./SearchBox";
 
 
 export default function Header() {
@@ -27,6 +28,7 @@ export default function Header() {
                     <Navbar.Brand as={Link} to="/">Your Shop</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
+                        <SerachBox/>
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}

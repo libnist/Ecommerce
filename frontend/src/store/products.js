@@ -21,12 +21,12 @@ const productSlice = createSlice({
 
 export const productActions = productSlice.actions;
 
-export const listProducts = () => {
+export const listProducts = (keyword) => {
     return async(dispatch) => {
         try {
             dispatch(productActions.productListRequest())
 
-            const { data } = await axios.get("/api/products")
+            const { data } = await axios.get(`/api/products?keyword=${keyword}`)
 
             dispatch(productActions.productListSuccess(data))
 
