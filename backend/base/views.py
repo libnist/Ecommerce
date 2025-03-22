@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -25,12 +26,29 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def getProducts(request):
     query = request.query_params.get("keyword")
     
-    if query == None:
+    if query in ("null", None):
         query = ""
     
-    products = Product.objects.filter(name__icontains=query)
+    products = Product.objects.filter(name__icontains=query).order_by("_id")
+    
+    page = request.query_params.get("page")
+    paginator = Paginator(products, 6)
+    
+    if page == None:
+        page = 1
+    
+    page = int(page)
+    
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+        
+    
     serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    return Response({'products': serializer.data, 'page': page, "pages": paginator.num_pages})
 
 
 @api_view(["GET"])
