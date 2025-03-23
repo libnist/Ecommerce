@@ -30,7 +30,7 @@ export default function Header() {
                     <Navbar.Collapse id="navbarScroll">
                         <SerachBox/>
                         <Nav
-                            className="me-auto my-2 my-lg-0"
+                            className="ms-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
