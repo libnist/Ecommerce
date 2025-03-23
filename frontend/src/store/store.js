@@ -17,6 +17,7 @@ import updateProductReducre from "./productEdit";
 import ordersReducer from "./orders";
 import orderDeliverReducer from "./deliverOrder";
 import createReviewReducer from "./createReview";
+import topProductsReducer from "./topProducts";
 
 const store = configureStore({
     reducer: {
@@ -37,6 +38,7 @@ const store = configureStore({
         orders: ordersReducer,
         deliverOrder: orderDeliverReducer,
         createReview: createReviewReducer,
+        topProducts: topProductsReducer,
     }
 })
 

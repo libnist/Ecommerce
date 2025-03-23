@@ -9,6 +9,7 @@ import { listProducts } from "../../store/products";
 import { useSearchParams } from "react-router-dom";
 
 import Paginate from "../Paginate";
+import ProductCarousel from "../ProductCarousel";
 
 export default function HomeScreen() {
 
@@ -26,6 +27,7 @@ export default function HomeScreen() {
 
     return (
         <>
+            {!keyword && <ProductCarousel/>}
             <h1>Latest Products</h1>
 
             {loading && <Loader />}
